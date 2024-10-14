@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #ffe6e6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            width: 80%; /* Constrain the width for better fit */
+            max-width: 400px; /* Maximum width to avoid filling larger screens */
+            margin: 0 auto; /* Center the box */
+            z-index: 10;
+        }
+
+        h1, p {
+            color: #ff6699;
+        }
+
+        button {
+            padding: 8px 16px; /* Adjust button size for mobile */
+            background-color: #ff6699;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff3366;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #proposal {
+            margin-top: 15px;
+        }
+
+        .proposal-text {
+            font-size: 20px;
+            color: #ff3366;
+        }
+
+        #message {
+            font-size: 18px;
+            color: #ff3366;
+            margin-top: 15px;
+        }
+
+        /* Falling flowers */
+        .flower {
+            position: absolute;
+            top: -50px;
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Custom heart design */
+        #heart {
+            position: relative;
+            width: 70px;
+            height: 60px;
+            margin-top: 20px;
+        }
+
+        #heart:before, #heart:after {
+            position: absolute;
+            content: "";
+            left: 35px;
+            top: 0;
+            width: 35px;
+            height: 55px;
+            background: red;
+            border-radius: 50px 50px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        #heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        /* Pulsating effect for the heart */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Heart pulse animation */
+        #heart {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Media queries for portrait mobile view */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 18px;
+            }
+
+            p, .proposal-text, #message {
+                font-size: 16px;
+            }
+
+            button {
+                font-size: 12px;
+            }
+
+            .container {
+                width: 85%; /* Further reduced for smaller screens */
+                padding: 15px;
+            }
+
+            #heart {
+                width: 60px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Falling flowers (they will be generated dynamically) -->
+    
+    <div class="container">
+        <h1>Hey you...</h1>
+        <p>You are the most amazing person I have ever met.</p>
+        <p>Will you do me the honor of being mine forever?</p>
+        <button id="reveal-btn">Reveal the Question</button>
+        <div id="proposal" class="hidden">
+            <p class="proposal-text">Will You Be My Girlfriend?</p>
+            <button class="yes-btn">Yes</button>
+            <button class="no-btn">No</button>
+        </div>
+        <p id="message"></p>
+    </div>
+
+    <!-- Pulsating heart placed below the container -->
+    <div id="heart"></div>
+
+    <!-- Add audio element for background music -->
+    <audio id="bg-music" src="background-music.mp3" loop></audio>
+
+    <script>
+        const revealBtn = document.getElementById('reveal-btn');
+        const proposal = document.getElementById('proposal');
+        const message = document.getElementById('message');
+        const yesBtn = document.querySelector('.yes-btn');
+        const noBtn = document.querySelector('.no-btn');
+        const bgMusic = document.getElementById('bg-music');
+
+        // Show proposal when the "Reveal the Question" button is clicked
+        revealBtn.addEventListener('click', function() {
+            proposal.classList.toggle('hidden');
+        });
+
+        // Handle the "Yes" button click with sound effect and message
+        yesBtn.addEventListener('click', function() {
+            message.innerHTML = "Yay! I knew you'd say yes! ❤️";
+            message.style.color = '#ff6699';
+
+            // Start playing background music after "Yes" is clicked
+            bgMusic.play();
+        });
+
+        // Handle the "No" button click with message
+        noBtn.addEventListener('click', function() {
+            message.innerHTML = "Oh no! That's okay, you're still awesome! 😊";
+            message.style.color = '#3366ff';
+        });
+
+        // Function to generate a random number in a range
+        function random(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        // Create 100 falling flowers for more density
+        const flowerCount = 400;
+        for (let i = 0; i < flowerCount; i++) {
+            const flower = document.createElement('div');
+            flower.classList.add('flower');
+
+            // Alternate between two images
+            if (i % 2 === 0) {
+                flower.style.backgroundImage = 'url(flower1.png)';
+            } else {
+                flower.style.backgroundImage = 'url(flower2.png)';
+            }
+
+            // Randomize starting position and animation duration
+            flower.style.left = `${random(0, 100)}vw`;
+            flower.style.animationDuration = `${random(5, 12)}s`;
+            flower.style.animationDelay = `${random(0, 5)}s`;
+            flower.style.transform = `rotate(${random(0, 360)}deg)`;
+
+            document.body.appendChild(flower);
+        }
+    </script>
+</body>
+</html>
